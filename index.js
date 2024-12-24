@@ -111,7 +111,15 @@ mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('✅ MongoDB Connected'))
   .catch(err => console.error('❌ MongoDB Connection Failed:', err));
 
- 
+ // Message Schema
+const messageSchema = new mongoose.Schema({
+  sender: String,
+  message: String,
+  timestamp: { type: Date, default: Date.now }
+});
+
+const Message = mongoose.model('Message', messageSchema);
+
 // Routes
 app.get('/messages', async (req, res) => {
   try {
