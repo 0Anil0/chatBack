@@ -9,7 +9,10 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: [
+            "http://localhost:3000",
+            "https://chatbot123fdsfvscvsfdfafdf.netlify.app"
+        ],
         methods: ["GET", "POST"]
     }
 });
@@ -41,6 +44,16 @@ app.get('/messages', async (req, res) => {
         res.status(500).json({ error: 'Failed to fetch messages' });
     }
 });
+// Routes
+app.get('/anil', async (req, res) => {
+    try {
+        console.log("checking")
+        const messages = await Message.find().sort({ timestamp: 1 });
+        res.json(messages);
+    } catch (err) {
+        res.status(500).json({ error: 'Failed to fetch messages' });
+    }
+});
 
 // Socket.IO Real-time Events
 io.on('connection', (socket) => {
@@ -59,4 +72,4 @@ io.on('connection', (socket) => {
 
 // Start Server
 const PORT = process.env.PORT || 5000;
-server.listen(PORT, () => console.log("🚀 Server running on http://localhost:${PORT})"));
+server.listen(PORT, () => console.log(`🚀 Server running on http://localhost:${PORT}`));
